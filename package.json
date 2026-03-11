@@ -1,0 +1,20 @@
+{
+  "name": "hm-automation",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript + Cucumber BDD test automation for H&M website",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:headed": "set HEADLESS=false && cucumber-js",
+    "test:smoke": "cucumber-js --tags @smoke",
+    "test:report": "cucumber-js && node src/utils/generateReport.js"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.0.0",
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.0.0",
+    "multiple-cucumber-html-reporter": "^3.9.0",
+    "playwright": "^1.49.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}

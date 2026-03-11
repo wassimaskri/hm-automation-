@@ -1,0 +1,68 @@
+import { Page } from "playwright";
+import { BasePage } from "./BasePage";
+
+export class ProductDetailPage extends BasePage {
+  private readonly productTitle = this.page.locator(
+    "h1, [class*='product-title'], [class*='ProductTitle']"
+  );
+  private readonly addToCartButton = this.page.locator(
+    'button:has-text("Add to Cart"), button:has-text("Add to Bag"), button:has-text("Add to Shopping Bag")'
+  );
+  private readonly addToWishlistButton = this.page.locator(
+    '[aria-label*="favorite" i], [aria-label*="wishlist" i], [aria-label*="Add to Favourites" i]'
+  );
+  private readonly sizeSelector = this.page.locator(
+    '[class*="size-picker"], [class*="SizePicker"], [data-testid*="size"]'
+  );
+
+  constructor(page: Page) {
+    super(page);
+  }
+
+  async getProductTitle(): Promise<string> {
+    await this.productTitle.first().waitFor({ timeout: 10000 });
+    return (await this.productTitle.first().textContent()) || "";
+  }
+
+  async selectSize(size: string): Promise<void> {
+    const sizeOptions = this.page.locator(
+      `[class*="size"] button, [class*="size"] li`
+    );
+    const allSizes = await sizeOptions.all();
+    for (const sizeOpt of allSizes) {
+      const text = await sizeOpt.textContent();
+      if (text?.trim() === size) {
+        await sizeOpt.click();
+        return;
+      }
+    }
+    await this.page.waitForTimeout(500);
+  }
+
+  async addToCart(): Promise<void> {
+    await this.addToCartButton.first().waitFor({ timeout: 10000 });
+    await this.addToCartButton.first().click();
+    await this.page.waitForTimeout(1000);
+  }
+
+  async addToWishlist(): Promise<void> {
+    await this.addToWishlistButton.first().waitFor({ timeout: 10000 });
+    await this.addToWishlistButton.first().click();
+    await this.page.waitForTimeout(1000);
+  }
+
+  async isSizePickerVisible(): Promise<boolean> {
+    return await this.sizeSelector.first().isVisible({ timeout: 5000 });
+  }
+
+  async isAddedToWishlist(): Promise<boolean> {
+    try {
+      const filledHeart = this.page.locator(
+        '[aria-label*="Remove from Favourites" i], [class*="wishlist--active"]'
+      );
+      return await filledHeart.isVisible({ timeout: 5000 });
+    } catch {
+      return false;
+    }
+  }
+}
