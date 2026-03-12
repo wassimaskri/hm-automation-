@@ -35,4 +35,14 @@ export class SearchResultsPage {
     const titles = await this.productCards.locator("h2, h3, span").allTextContents();
     return titles;
   }
+
+  /** Click on the first product in the search results */
+  async clickFirstProduct(): Promise<void> {
+    // Wait until at least one product is visible
+    await this.productCards.first().waitFor({ state: "visible", timeout: 10000 });
+
+    // Scroll into view and click
+    await this.productCards.first().scrollIntoViewIfNeeded();
+    await this.productCards.first().click();
+  }
 }

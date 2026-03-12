@@ -14,7 +14,7 @@ Before(async function () {
   //   headless: false
   // });
   //browser = await webkit.launch({ headless:false });
-  browser = await firefox.launch({ headless:false });
+  browser = await chromium.launch({ headless:false });
   context = await browser.newContext({
     viewport: { width: 1000, height: 900 },
     locale: "en-GB"
