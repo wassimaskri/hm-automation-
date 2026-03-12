@@ -78,16 +78,6 @@ Then(
   }
 );
 When(
-  'I fill in date of birth with day {string}, month {string}, year {string}',
-  async function (this: CustomWorld, day: string, month: string, year: string) {
-
-    await this.page.locator('#dateOfBirth-D').fill(day);
-    await this.page.locator('#dateOfBirth-M').fill(month);
-    await this.page.locator('#dateOfBirth-Y').fill(year);
-
-  }
-);
-When(
   "I submit the registration form",
   async function (this: CustomWorld) {
     const loginPage = new LoginPage(this.page);

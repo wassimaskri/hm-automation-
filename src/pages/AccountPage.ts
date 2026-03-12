@@ -3,11 +3,15 @@ import { BasePage } from "./BasePage";
 
 export class AccountPage extends BasePage {
   private readonly logoutButton = this.page.locator(
-    'button:has-text("Sign out"), a:has-text("Sign out"), button:has-text("Log out")'
+    'button:has-text("Se déconnecter"), a:has-text("Se déconnecter"), button:has-text("Se déconnecter")'
   );
   private readonly accountMenuIcon = this.page.locator(
     '[aria-label*="account" i], [data-testid*="account"]'
   );
+  private readonly Deconnexion = this.page.locator(
+    '//*[@id="__next"]/div/div/div/div/aside/section[2]/nav/ul/li[5]/a'
+  );
+
 
   constructor(page: Page) {
     super(page);
@@ -31,7 +35,7 @@ export class AccountPage extends BasePage {
 
   async navigateToLogout(): Promise<void> {
     await this.navigateTo(
-      "https://www2.hm.com/en_gb/profile/login.html?action=logout"
+      "https://www2.hm.com/fr_fr/account"
     );
     await this.waitForPageLoad();
   }
