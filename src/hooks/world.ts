@@ -14,6 +14,7 @@ export class CustomWorld extends World implements HMWorld {
   browser!: Browser;
   context!: BrowserContext;
   page!: Page;
+  email!: string;
 
   constructor(options: IWorldOptions) {
     super(options);

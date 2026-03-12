@@ -12,59 +12,46 @@ When(
 );
 
 Then(
-  "I should see the registration form",
-  async function (this: CustomWorld) {
-    const hasForm = await this.page
-      .locator('input[type="email"], input[type="password"]')
-      .first()
-      .isVisible({ timeout: 10000 });
-    expect(hasForm).toBeTruthy();
+  "I should see the registration form {string}",
+  async function ( this: CustomWorld, email: string) {
+   
+    const loginPage = new LoginPage(this.page);
+    await loginPage.fillEmail(email);
+
   }
 );
 
 Then(
-  "I should see a field for first name",
+  "I Click on the Contineur",
   async function (this: CustomWorld) {
-    const field = await this.page
-      .locator('input[name="firstname"], input[name="firstName"]')
-      .first()
-      .isVisible({ timeout: 5000 });
-    expect(field).toBeTruthy();
+
+  
+  const loginPage = new LoginPage(this.page);
+  await loginPage.ContinuerRegister();
+
+}
+);
+Then(
+  "I should fill a valid password",
+  async function (this: CustomWorld) {
+    const passwordLocator = await this.page.waitForSelector('#password');
+
+   
+
+    const validPassword = "Wassim99A"; // 8-25 chars, 1 maj, 1 min, 1 digit, no spaces
+
+   
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,25}$/;
+    if (!passwordPattern.test(validPassword)) {
+      throw new Error(
+        "Password must be 8-25 characters, include 1 uppercase, 1 lowercase, 1 digit, and no spaces."
+      );
+    }
+
+    await passwordLocator.fill(validPassword);
   }
 );
 
-Then(
-  "I should see a field for last name",
-  async function (this: CustomWorld) {
-    const field = await this.page
-      .locator('input[name="lastname"], input[name="lastName"]')
-      .first()
-      .isVisible({ timeout: 5000 });
-    expect(field).toBeTruthy();
-  }
-);
-
-Then(
-  "I should see a field for email address",
-  async function (this: CustomWorld) {
-    const field = await this.page
-      .locator('input[type="email"]')
-      .first()
-      .isVisible({ timeout: 5000 });
-    expect(field).toBeTruthy();
-  }
-);
-
-Then(
-  "I should see a field for password",
-  async function (this: CustomWorld) {
-    const field = await this.page
-      .locator('input[type="password"]')
-      .first()
-      .isVisible({ timeout: 5000 });
-    expect(field).toBeTruthy();
-  }
-);
 
 When(
   "I fill in the registration form with:",
@@ -72,14 +59,34 @@ When(
     const loginPage = new LoginPage(this.page);
     const data = dataTable.rowsHash();
     await loginPage.fillRegistrationForm(
-      data.firstName,
-      data.lastName,
+      //data.firstName,
+      //data.lastName,
       data.email,
       data.password
     );
   }
 );
 
+Then(
+  "I should fill date of birth with day {string}, month {string}, year {string}",
+  async function (this: CustomWorld, day: string, month: string, year: string) {
+
+    const loginPage = new LoginPage(this.page);
+
+    await loginPage.fillDateOfBirth(day, month, year);
+
+  }
+);
+When(
+  'I fill in date of birth with day {string}, month {string}, year {string}',
+  async function (this: CustomWorld, day: string, month: string, year: string) {
+
+    await this.page.locator('#dateOfBirth-D').fill(day);
+    await this.page.locator('#dateOfBirth-M').fill(month);
+    await this.page.locator('#dateOfBirth-Y').fill(year);
+
+  }
+);
 When(
   "I submit the registration form",
   async function (this: CustomWorld) {
@@ -89,9 +96,22 @@ When(
 );
 
 Then(
+  'I click on the "Visit account" link',
+  async function (this: CustomWorld) {
+    const loginPage = new LoginPage(this.page);
+    await loginPage.VisitAccout();
+  }
+);
+
+Then(
   "I should be redirected away from the registration page",
   async function (this: CustomWorld) {
-    await this.page.waitForTimeout(2000);
-    expect(this.page.url()).toBeTruthy();
+
+    const welcomeText = this.page.getByText(`Bienvenue, ${this.email}`);
+
+    await welcomeText.waitFor({ state: "visible", timeout: 10000 });
+
+    await expect(welcomeText).toBeVisible();
+
   }
 );
