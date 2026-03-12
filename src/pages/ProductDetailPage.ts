@@ -6,7 +6,7 @@ export class ProductDetailPage extends BasePage {
     "h1, [class*='product-title'], [class*='ProductTitle']"
   );
   private readonly addToCartButton = this.page.locator(
-    'button:has-text("Add to Cart"), button:has-text("Add to Bag"), button:has-text("Add to Shopping Bag")'
+    '//*[@id="add-to-bag-button"]'
   );
   private readonly addToWishlistButton = this.page.locator(
     '[aria-label*="favorite" i], [aria-label*="wishlist" i], [aria-label*="Add to Favourites" i]'
@@ -14,6 +14,10 @@ export class ProductDetailPage extends BasePage {
   private readonly sizeSelector = this.page.locator(
     '[class*="size-picker"], [class*="SizePicker"], [data-testid*="size"]'
   );
+  private readonly prodactClick = this.page.locator(
+    'splide33-slide01'
+  );
+
 
   constructor(page: Page) {
     super(page);
@@ -22,6 +26,11 @@ export class ProductDetailPage extends BasePage {
   async getProductTitle(): Promise<string> {
     await this.productTitle.first().waitFor({ timeout: 10000 });
     return (await this.productTitle.first().textContent()) || "";
+  }
+  async selectProduct(): Promise<void> {
+    await this.prodactClick.first().click();
+    await this.waitForPageLoad();
+
   }
 
   async selectSize(size: string): Promise<void> {
