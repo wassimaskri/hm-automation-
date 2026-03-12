@@ -1,32 +1,38 @@
-import { Page } from "playwright";
-import { BasePage } from "./BasePage";
+// src/pages/SearchResultsPage.ts
+import { Page, Locator } from "playwright";
 
-export class SearchResultsPage extends BasePage {
-  private readonly productCards = this.page.locator(
-    '[class*="product-item"], article[class*="product"], li[class*="product"]'
-  );
+export class SearchResultsPage {
+  private page: Page;
+  private productCards: Locator;
 
   constructor(page: Page) {
-    super(page);
+    this.page = page;
+    // Use the working XPath
+    this.productCards = page.locator(
+      '//*[@id="sticky-header-component"]/div/div[2]/ul/li[1]/div[2]/div/div[2]/div/ul/li'
+    );
   }
 
+  // Wait for the results to be visible
   async waitForResults(): Promise<void> {
-    await this.page.waitForLoadState("domcontentloaded");
-    await this.page.waitForTimeout(1000);
+    await this.productCards.first().waitFor({ state: "visible", timeout: 15000 });
   }
 
+  // Count products
   async getProductCount(): Promise<number> {
     await this.waitForResults();
     return await this.productCards.count();
   }
 
+  // Check if any results exist
   async hasResults(): Promise<boolean> {
     return (await this.getProductCount()) > 0;
   }
 
-  async clickFirstProduct(): Promise<void> {
+  // Optionally, get product titles for validation
+  async getProductTitles(): Promise<string[]> {
     await this.waitForResults();
-    await this.productCards.first().click();
-    await this.waitForPageLoad();
+    const titles = await this.productCards.locator("h2, h3, span").allTextContents();
+    return titles;
   }
 }

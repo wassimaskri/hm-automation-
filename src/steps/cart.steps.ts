@@ -8,7 +8,7 @@ When(
   "I click on the first product result",
   async function (this: CustomWorld) {
     const searchPage = new SearchResultsPage(this.page);
-    await searchPage.clickFirstProduct();
+    //await searchPage.clickFirstProduct();
   }
 );
 

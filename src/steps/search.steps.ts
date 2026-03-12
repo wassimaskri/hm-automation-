@@ -17,6 +17,11 @@ Then(
   async function (this: CustomWorld) {
     const searchPage = new SearchResultsPage(this.page);
     const hasResults = await searchPage.hasResults();
+
+    if (!hasResults) {
+      await this.page.screenshot({ path: "search_results_failed.png", fullPage: true });
+    }
+
     expect(hasResults).toBeTruthy();
   }
 );
