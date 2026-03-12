@@ -7,10 +7,11 @@ export class SearchResultsPage {
 
   constructor(page: Page) {
     this.page = page;
-    // Use the working XPath
-    this.productCards = page.locator(
-      '//*[@id="sticky-header-component"]/div/div[2]/ul/li[1]/div[2]/div/div[2]/div/ul/li'
-    );
+    
+
+    
+
+    this.productCards = this.page.locator('article');
   }
 
   // Wait for the results to be visible
@@ -29,16 +30,14 @@ export class SearchResultsPage {
     return (await this.getProductCount()) > 0;
   }
 
-  // Optionally, get product titles for validation
   async getProductTitles(): Promise<string[]> {
     await this.waitForResults();
     const titles = await this.productCards.locator("h2, h3, span").allTextContents();
     return titles;
   }
 
-  /** Click on the first product in the search results */
   async clickFirstProduct(): Promise<void> {
-    // Wait until at least one product is visible
+    
     await this.productCards.first().waitFor({ state: "visible", timeout: 10000 });
 
     // Scroll into view and click

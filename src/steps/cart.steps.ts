@@ -16,7 +16,7 @@ When(
   "I select size {string}",
   async function (this: CustomWorld, size: string) {
     const productPage = new ProductDetailPage(this.page);
-    await productPage.selectProduct();
+    //await productPage.selectProduct();
     await productPage.selectSize(size);
   }
 );
