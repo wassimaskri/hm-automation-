@@ -63,7 +63,7 @@ private readonly yearOfBirth = this.page.locator('#dateOfBirth-Y');
   
     if (await denied.isVisible().catch(() => false)) {
   
-      console.log("Access Denied detected → clearing session...");
+      console.log("Access Denied detected :: clearing session...");
   
       const context = page.context();
   

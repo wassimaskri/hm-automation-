@@ -14,17 +14,19 @@ When(
 Then(
   "the product should be marked as a favourite",
   async function (this: CustomWorld) {
-    await this.page.waitForTimeout(1500);
-    expect(this.page.url()).toContain("hm.com");
+    const productPage = new ProductDetailPage(this.page);
+
+    const isFavourite = await productPage.isAddedToWishlist();
+
+    expect(isFavourite).toBeTruthy();
   }
 );
 
 Then(
   'the "Add to Favourites" button should be visible',
   async function (this: CustomWorld) {
-    const wishlistBtn = this.page.locator(
-      '[aria-label*="favourite" i], [aria-label*="wishlist" i], [aria-label*="Add to Favourites" i]'
-    );
+    const wishlistBtn = this.page.locator('button:has(svg)');
+await expect(wishlistBtn.first()).toBeVisible();
     const isVisible = await wishlistBtn.first().isVisible({ timeout: 10000 });
     expect(isVisible).toBeTruthy();
   }

@@ -8,9 +8,9 @@ export class AccountPage extends BasePage {
   private readonly accountMenuIcon = this.page.locator(
     '[aria-label*="account" i], [data-testid*="account"]'
   );
-  private readonly Deconnexion = this.page.locator(
-    '//*[@id="__next"]/div/div/div/div/aside/section[2]/nav/ul/li[5]/a'
-  );
+  // private readonly Deconnexion = this.page.locator(
+  //   '//*[@id="__next"]/div/div/div/div/aside/section[2]/nav/ul/li[5]/a'
+  // );
 
 
   constructor(page: Page) {

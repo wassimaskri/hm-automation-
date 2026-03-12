@@ -9,7 +9,7 @@ export class ProductDetailPage extends BasePage {
     '//*[@id="add-to-bag-button"]'
   );
   private readonly addToWishlistButton = this.page.locator(
-    '[aria-label*="favorite" i], [aria-label*="wishlist" i], [aria-label*="Add to Favourites" i]'
+    'button:has(path[d*="6.217"])'
   );
   private readonly sizeSelector = this.page.locator(
     '[class*="size-picker"], [class*="SizePicker"], [data-testid*="size"]'
@@ -55,9 +55,13 @@ export class ProductDetailPage extends BasePage {
   }
 
   async addToWishlist(): Promise<void> {
-    await this.addToWishlistButton.first().waitFor({ timeout: 10000 });
+
+    await this.addToWishlistButton.first().waitFor({ state: "visible", timeout: 10000 });
+  
     await this.addToWishlistButton.first().click();
+  
     await this.page.waitForTimeout(1000);
+  
   }
 
   async isSizePickerVisible(): Promise<boolean> {
@@ -65,13 +69,12 @@ export class ProductDetailPage extends BasePage {
   }
 
   async isAddedToWishlist(): Promise<boolean> {
-    try {
-      const filledHeart = this.page.locator(
-        '[aria-label*="Remove from Favourites" i], [class*="wishlist--active"]'
-      );
-      return await filledHeart.isVisible({ timeout: 5000 });
-    } catch {
-      return false;
-    }
+
+    const activeHeart = this.page.locator(
+      'button[aria-pressed="true"], button[class*="active"]'
+    );
+  
+    return await activeHeart.first().isVisible({ timeout: 5000 }).catch(() => false);
+  
   }
 }
